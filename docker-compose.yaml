@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+    maven:
+        image: maven:3.8.1-jdk-11
+        ports:
+            - "127.0.1.4:18080:8080"
