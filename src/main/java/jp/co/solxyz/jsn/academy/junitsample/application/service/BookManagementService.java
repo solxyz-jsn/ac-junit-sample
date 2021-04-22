@@ -1,9 +1,12 @@
 package jp.co.solxyz.jsn.academy.junitsample.application.service;
 
-import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.dto.BookManagementTableDto;
-
 import java.util.List;
 
+import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.dto.BookManagementTableDto;
+
+/**
+ * 書籍管理画面サービスインターフェイス
+ */
 public interface BookManagementService {
 
     /**

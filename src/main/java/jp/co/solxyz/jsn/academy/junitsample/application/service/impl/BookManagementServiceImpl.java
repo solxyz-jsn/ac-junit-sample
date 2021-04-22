@@ -1,27 +1,34 @@
 package jp.co.solxyz.jsn.academy.junitsample.application.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+
 import jp.co.solxyz.jsn.academy.junitsample.application.service.BookManagementService;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.api.component.BookOrderApi;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.api.request.BookOrderRequest;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.api.response.BookOrderResponse;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.dto.BookManagementTableDto;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.domain.book.service.BookManagementTableService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 
-import java.util.List;
-
+/**
+ * 書籍管理画面サービス
+ */
 @Service
 public class BookManagementServiceImpl implements BookManagementService {
 
+	/** 書籍管理テーブルサービス */
     @Autowired
     private BookManagementTableService bookManagementTableService;
 
+    /** 書籍発注API */
     @Autowired
     private BookOrderApi bookOrderApi;
 
+	/** {@inheritDoc} */
     @Override
     public List<BookManagementTableDto> init() {
         List<BookManagementTableDto> result = null;
@@ -33,6 +40,7 @@ public class BookManagementServiceImpl implements BookManagementService {
         return result;
     }
 
+	/** {@inheritDoc} */
     @Override
     public int update(int bookId, String bookName, int stock) {
         int result = 0;
@@ -50,6 +58,7 @@ public class BookManagementServiceImpl implements BookManagementService {
         return result;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int order(int bookId, String bookName, int quantity) {
         int result = 0;

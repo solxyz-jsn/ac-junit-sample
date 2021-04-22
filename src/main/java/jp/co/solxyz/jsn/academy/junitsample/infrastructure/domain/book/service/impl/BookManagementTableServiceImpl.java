@@ -1,15 +1,15 @@
 package jp.co.solxyz.jsn.academy.junitsample.infrastructure.domain.book.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.dto.BookManagementTableDto;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.repository.BookManagementTableRepository;
 import jp.co.solxyz.jsn.academy.junitsample.infrastructure.domain.book.service.BookManagementTableService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 書籍管理テーブルサービス
@@ -18,21 +18,21 @@ import java.util.List;
 @AllArgsConstructor
 public class BookManagementTableServiceImpl implements BookManagementTableService {
 
-    /** 書籍管理テーブルリポジトリ */
-    @Autowired
-    private BookManagementTableRepository bookManagementTableRepository;
+	/** 書籍管理テーブルリポジトリ */
+	@Autowired
+	private BookManagementTableRepository bookManagementTableRepository;
 
-    /** ${inheritDoc} */
-    @Override
-    public List<BookManagementTableDto> searchStockInfo() {
-        return bookManagementTableRepository.findAll();
-    }
+	/** {@inheritDoc} */
+	@Override
+	public List<BookManagementTableDto> searchStockInfo() {
+		return bookManagementTableRepository.findAll();
+	}
 
-    /** ${inheritDoc} */
-    @Override
-    @Transactional
-    public BookManagementTableDto updateStockInfo(BookManagementTableDto dto) {
-        return bookManagementTableRepository.saveAndFlush(dto);
-    }
+	/** {@inheritDoc} */
+	@Override
+	@Transactional
+	public BookManagementTableDto updateStockInfo(BookManagementTableDto dto) {
+		return bookManagementTableRepository.saveAndFlush(dto);
+	}
 
 }
