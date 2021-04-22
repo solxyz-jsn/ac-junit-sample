@@ -1,0 +1,4 @@
+2021-04-22 16:24:15 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: テーブル "BOOK_MANAGEMENT_TBL" が見つかりません
+Table "BOOK_MANAGEMENT_TBL" not found; SQL statement:
+select bookmanage0_.book_id as book_id1_0_, bookmanage0_.book_name as book_nam2_0_, bookmanage0_.stock as stock3_0_, bookmanage0_.version as version4_0_ from book_management_tbl bookmanage0_ [42102-200]
