@@ -66,25 +66,25 @@ public class BookManagementServiceImpl implements BookManagementService {
         request.setBookId(bookId);
         request.setQuantity(quantity);
 
-        BookOrderResponse response = null;
-        try {
-            response = bookOrderApi.order(request);
-        } catch (RestClientException e) {
-            result = 1;
-            return result;
-        }
+		BookOrderResponse response = null;
+		try {
+			response = bookOrderApi.order(request);
+		} catch (RestClientException e) {
+			result = 1;
+			return result;
+		}
 
-        BookManagementTableDto dto = new BookManagementTableDto();
-        dto.setBookId(bookId);
-        dto.setBookName(bookName);
-        dto.setStock(response.getStock());
+		BookManagementTableDto dto = new BookManagementTableDto();
+		dto.setBookId(bookId);
+		dto.setBookName(bookName);
+		dto.setStock(response.getStock());
 
-        try {
-            bookManagementTableService.updateStockInfo(dto);
-        } catch (DataAccessException e) {
-            // 例外時は本来であればログ等を吐いたりする
-            result = 1;
-        }
-        return result;
-    }
+		try {
+			bookManagementTableService.updateStockInfo(dto);
+		} catch (DataAccessException e) {
+			// 例外時は本来であればログ等を吐いたりする
+			result = 1;
+		}
+		return result;
+	}
 }
