@@ -21,50 +21,52 @@ import jp.co.solxyz.jsn.academy.junitsample.infrastructure.domain.book.service.B
 public class BookManagementServiceImpl implements BookManagementService {
 
 	/** 書籍管理テーブルサービス */
-    @Autowired
-    private BookManagementTableService bookManagementTableService;
+	@Autowired
+	private BookManagementTableService bookManagementTableService;
 
-    /** 書籍発注API */
-    @Autowired
-    private BookOrderApi bookOrderApi;
-
-	/** {@inheritDoc} */
-    @Override
-    public List<BookManagementTableDto> init() {
-        List<BookManagementTableDto> result = null;
-        try {
-            result = bookManagementTableService.searchStockInfo();
-        } catch (DataAccessException e) {
-            // 例外時は本来であればログ等を吐いたりする
-        }
-        return result;
-    }
+	/** 書籍発注API */
+	@Autowired
+	private BookOrderApi bookOrderApi;
 
 	/** {@inheritDoc} */
-    @Override
-    public int update(int bookId, String bookName, int stock) {
-        int result = 0;
-        BookManagementTableDto dto = new BookManagementTableDto();
-        dto.setBookId(bookId);
-        dto.setBookName(bookName);
-        dto.setStock(stock);
-        try {
-            bookManagementTableService.updateStockInfo(dto);
-            result = 0;
-        } catch (DataAccessException e) {
-            // 例外時は本来であればログ等を吐いたりする
-            result = 1;
-        }
-        return result;
-    }
+	@Override
+	public List<BookManagementTableDto> init() {
+		List<BookManagementTableDto> result = null;
+		try {
+			result = bookManagementTableService.searchStockInfo();
+		} catch (DataAccessException e) {
+			// 例外時は本来であればログ等を吐いたりする
+			e.printStackTrace();
+		}
+		System.out.println(result);
+		return result;
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    public int order(int bookId, String bookName, int quantity) {
-        int result = 0;
-        BookOrderRequest request = new BookOrderRequest();
-        request.setBookId(bookId);
-        request.setQuantity(quantity);
+	/** {@inheritDoc} */
+	@Override
+	public int update(int bookId, String bookName, int stock) {
+		int result = 0;
+		BookManagementTableDto dto = new BookManagementTableDto();
+		dto.setBookId(bookId);
+		dto.setBookName(bookName);
+		dto.setStock(stock);
+		try {
+			bookManagementTableService.updateStockInfo(dto);
+			result = 0;
+		} catch (DataAccessException e) {
+			// 例外時は本来であればログ等を吐いたりする
+			result = 1;
+		}
+		return result;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int order(int bookId, String bookName, int quantity) {
+		int result = 0;
+		BookOrderRequest request = new BookOrderRequest();
+		request.setBookId(bookId);
+		request.setQuantity(quantity);
 
 		BookOrderResponse response = null;
 		try {
