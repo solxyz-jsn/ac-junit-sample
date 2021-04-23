@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,20 +46,22 @@ class BookManagementServiceImplTest {
 	@InjectMocks
 	BookManagementServiceImpl sut;
 
-	@Mock
+	@Spy
 	BookManagementTableService bookManagementTableService;
 
 	@Mock
 	BookOrderApi bookOrderApi;
-
-	AutoCloseable mocks;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@BeforeEach
 	public void setup() {
-		mocks = MockitoAnnotations.openMocks(this);
+
+	}
+
+	@AfterEach
+	public void after() throws Exception {
 
 		// DBコネクション取得
 		Connection conn;
@@ -79,19 +82,19 @@ class BookManagementServiceImplTest {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-	}
-
-	@AfterEach
-	public void after() throws Exception {
-
-		mocks.close();
 
 	}
 
 	@Test
 	@Sql(scripts = "classpath:data.sql")
-	void sample() {
-		System.out.println(sut.init());
+	void sample() throws Exception {
+		try (var mock = MockitoAnnotations.openMocks(this)) {
+
+			System.out.println(sut.init());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Nested
@@ -99,12 +102,40 @@ class BookManagementServiceImplTest {
 
 		@Test
 		@Sql(scripts = "classpath:data.sql")
-		void 一覧取得成功() {
-			List<BookManagementTableDto> result = new ArrayList<>();
+		void 一覧取得成功() throws Exception {
+			try (var mock = MockitoAnnotations.openMocks(this)) {
+				List<BookManagementTableDto> result = new ArrayList<>();
 
-			doReturn(result).when(bookManagementTableService).searchStockInfo();
+				doReturn(result).when(bookManagementTableService).searchStockInfo();
 
-			assertThat(sut.init()).isEqualTo(result);
+				assertThat(sut.init()).isEqualTo(result);
+			}
+		}
+
+		@Test
+		@Sql(scripts = "classpath:data.sql")
+		void Database() throws SQLException, DatabaseUnitException {
+
+//			try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+//
+//				IDatabaseConnection dbconn = new DatabaseConnection(conn);
+//				var query = new QueryDataSet(dbconn);
+//
+//				query.addTable("");
+//
+//				var result = jdbcTemplate.queryForList(
+//						"SELECT BOOK_ID, BOOK_NAME, STOCK, VERSION FROM BOOK_MANAGEMENT_TBL",
+//						new BeanPropertyRowMapper<BookManagementTableDto>(BookManagementTableDto.class));
+//
+//				System.out.println(result);
+//			}
+
+			List<BookManagementTableDto> list = sut.init();
+			assertThat(list.size()).isEqualTo(3);
+
+			var first = list.get(0);
+
+			assertThat(first.getBookId()).isEqualTo(1);
 		}
 
 		@Test
@@ -113,9 +144,9 @@ class BookManagementServiceImplTest {
 			doThrow(new DataAccessException("") {
 			}).when(bookManagementTableService).searchStockInfo();
 
-//			Throwable exception = assertThrows(DataAccessException.class, () -> {
-//				sut.init();
-//			});
+			//			Throwable exception = assertThrows(DataAccessException.class, () -> {
+			//				sut.init();
+			//			});
 			sut.init();
 		}
 	}
