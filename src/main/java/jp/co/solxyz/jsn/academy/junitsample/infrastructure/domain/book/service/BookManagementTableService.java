@@ -1,8 +1,8 @@
 package jp.co.solxyz.jsn.academy.junitsample.infrastructure.domain.book.service;
 
-import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.dto.BookManagementTableDto;
-
 import java.util.List;
+
+import jp.co.solxyz.jsn.academy.junitsample.infrastructure.database.dto.BookManagementTableDto;
 
 /**
  * 書籍在庫情報処理サービス
