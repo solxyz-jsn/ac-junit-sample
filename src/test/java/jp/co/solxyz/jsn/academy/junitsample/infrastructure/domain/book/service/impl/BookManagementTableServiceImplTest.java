@@ -49,19 +49,12 @@ class BookManagementTableServiceImplTest {
 	@Autowired
 	private BookManagementTableRepository bookManagementTableRepository;
 
-	//	private AutoCloseable closable;
-
 	@BeforeEach
 	public void setup() {
-		//		MockitoAnnotations.initMocks(this);
-
-		//		closable = MockitoAnnotations.openMocks(this);	
 	}
 
 	@AfterEach
 	public void after() throws Exception {
-
-		//		closable.close();
 
 		// DBコネクション取得
 		Connection conn;
