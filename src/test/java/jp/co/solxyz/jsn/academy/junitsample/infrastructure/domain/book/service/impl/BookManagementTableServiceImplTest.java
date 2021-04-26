@@ -43,19 +43,26 @@ class BookManagementTableServiceImplTest {
 	@Autowired
 	BookManagementTableServiceImpl sut;
 
-	//	@Mock
-	//	BookManagementTableRepository repository;
-
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private BookManagementTableRepository bookManagementTableRepository;
+
+	//	private AutoCloseable closable;
 
 	@BeforeEach
 	public void setup() {
 		//		MockitoAnnotations.initMocks(this);
+
+		//		closable = MockitoAnnotations.openMocks(this);	
 	}
 
 	@AfterEach
-	public void after() {
+	public void after() throws Exception {
+
+		//		closable.close();
+
 		// DBコネクション取得
 		Connection conn;
 		try {
@@ -147,8 +154,16 @@ class BookManagementTableServiceImplTest {
 			assertThat(actualDto.getBookName()).isEqualTo(BOOK_NAME);
 		}
 
+		class MyDataAccessException extends DataAccessException {
+
+			public MyDataAccessException() {
+				super("Mocked Error");
+			}
+
+		}
+
 		@Test
-		void 書籍在庫情報更新失敗() {
+		void 書籍在庫情報更新失敗() throws Exception {
 
 			BookManagementTableDto dto = new BookManagementTableDto();
 			dto.setBookId(6);
@@ -156,26 +171,25 @@ class BookManagementTableServiceImplTest {
 			dto.setStock(100);
 			dto.setVersion(1);
 
+			// エラーを発生させるため、今回だけMock化する
 			BookManagementTableRepository mock = mock(BookManagementTableRepository.class);
 
-			doThrow(new DataAccessException("") {
-			}).when(mock).saveAndFlush(dto);
+			// PowerMockが利用不可能な場合の注入方法（最終手段）
+			// var field = BookManagementTableServiceImpl.class.getDeclaredField("bookManagementTableRepository");
+			// field.setAccessible(true);
+			// field.set(sut, mock);
 
-			Whitebox.setInternalState(sut, "bookManagementTableRepository", mock);
+			Whitebox.setInternalState(sut, BookManagementTableRepository.class, mock);
 
-			System.out.println(sut.updateStockInfo(dto));
+			try {
+				doThrow(new MyDataAccessException()).when(bookManagementTableRepository).saveAndFlush(dto);
 
-			//			try (var  = MockitoAnnotations.openMocks(this)) {
+				sut.updateStockInfo(dto);
 
-			//
-			//				//			Throwable exception = assertThrows(DataAccessException.class, () -> {
-			//				//				sut.updateStockInfo(dto);
-			//				//			});
-			//
-			//			} catch (Exception e) {
-			//				// TODO: handle exception
-			//			}
-
+				fail("Exception is not fired.");
+			} catch (Exception e) {
+				System.out.println("Success.");
+			}
 		}
 	}
 
